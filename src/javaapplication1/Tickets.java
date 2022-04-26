@@ -16,9 +16,9 @@ public class Tickets extends JFrame implements ActionListener {
 	Boolean chkIfAdmin = null;
 
 	// Main menu object items
-	private JMenu mnuFile = new JMenu("File");
-	private JMenu mnuAdmin = new JMenu("Admin");
-	private JMenu mnuTickets = new JMenu("Tickets");
+	private final JMenu mnuFile = new JMenu("File");
+	private final JMenu mnuAdmin = new JMenu("Admin");
+	private final JMenu mnuTickets = new JMenu("Tickets");
 
 	// Sub menu item objects for all Main menu item objects
 	JMenuItem mnuItemExit;
