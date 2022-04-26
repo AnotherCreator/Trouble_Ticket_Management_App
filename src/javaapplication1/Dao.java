@@ -83,17 +83,20 @@ public class Dao {
 		}
 
 		try {
-
-			// Setup the connection with the DB
-
 			statement = getConnection().createStatement();
 
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
 			for (List<String> rowData : array) {
-				sql = "insert into jpapa_users(uname,upass,admin) " + "values('" + rowData.get(0) + "'," +
-						" '" + rowData.get(1) + "','" + rowData.get(2) + "');";
-				statement.executeUpdate(sql);
+				// Check if user exists in the table
+				if (statement.execute("SELECT * FROM jregi_users WHERE uname = '"+rowData.get(0)+"'")) {
+					continue;
+				} else {
+					// Add new user(s) to table
+					sql = "insert into jregi_users(uname,upass,admin) " + "values('" + rowData.get(0) + "'," +
+							" '" + rowData.get(1) + "','" + rowData.get(2) + "');";
+					statement.executeUpdate(sql);
+				}
 			}
 			System.out.println("Inserts completed in the given database...");
 
@@ -109,7 +112,7 @@ public class Dao {
 		int id = 0;
 		try {
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert into jpapa_tickets" + "(ticket_issuer, ticket_description) values(" +
+			statement.executeUpdate("Insert into jregi_tickets" + "(ticket_issuer, ticket_description) values(" +
 					" '" + ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
 
 			// retrieve ticket id number newly auto generated upon record insertion
@@ -131,7 +134,7 @@ public class Dao {
 		ResultSet results = null;
 		try {
 			statement = connect.createStatement();
-			results = statement.executeQuery("SELECT * FROM jpapa_tickets");
+			results = statement.executeQuery("SELECT * FROM jregi_tickets");
 			//connect.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
