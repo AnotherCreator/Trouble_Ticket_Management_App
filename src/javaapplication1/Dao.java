@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Dao {
 	// instance fields
@@ -123,9 +124,9 @@ public class Dao {
 			String currentTime = sdf.format(dt);
 
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert into jregi_tickets3" +
-					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) values(" +
-					"'"+ticketName+"', " + "'"+ ticketDesc +"', '"+currentTime+"', '"+"Open"+"')",
+			statement.executeUpdate("Insert INTO jregi_tickets3" +
+					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) VALUES(" +
+					"'"+ticketName+"', '"+ticketDesc+"', '"+currentTime+"', '"+"Open"+"')",
 					Statement.RETURN_GENERATED_KEYS);
 
 			// retrieve ticket id number newly auto generated upon record insertion
@@ -155,11 +156,29 @@ public class Dao {
 		return results;
 	}
 
-	public void updateRecords(String ticket_id) { // Update records by ticket_id
+	public void updateRecords(Integer ticketID, String ticketDesc, String ticketStatus) { // Update records by ticket_id
 		try {
-			statement = connect.createStatement();
+			java.util.Date dt = new java.util.Date();
+			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String currentTime = sdf.format(dt);
 
-//			String newDesc =
+			statement = connect.createStatement();
+			PreparedStatement update = getConnection().prepareStatement(
+					"UPDATE jregi_tickets3 SET ticket_description = ?, " +
+							"ticket_modified_date = ?, " +
+							"ticket_status = ? " +
+							"WHERE ticket_id = ?",
+					Statement.RETURN_GENERATED_KEYS);
+
+			update.setString(1, ticketDesc);
+			update.setString(2, currentTime);
+			if (Objects.equals(ticketStatus, "1") || Objects.equals(ticketStatus, null)) {
+				update.setString(3, "Open");
+			} else {
+				update.setString(3, "Closed");
+			}
+			update.setInt(4, ticketID);
+			update.executeUpdate();
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();
