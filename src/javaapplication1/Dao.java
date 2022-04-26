@@ -25,7 +25,6 @@ public class Dao {
 					.getConnection("jdbc:mysql://www.papademas.net:3307/tickets?autoReconnect=true&useSSL=false"
 							+ "&user=fp411&password=411");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return connect;
@@ -35,8 +34,10 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
-		final String createTicketsTable = "CREATE TABLE jpapa_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, ticket_issuer VARCHAR(30), ticket_description VARCHAR(200))";
-		final String createUsersTable = "CREATE TABLE jpapa_users(uid INT AUTO_INCREMENT PRIMARY KEY, uname VARCHAR(30), upass VARCHAR(30), admin int)";
+		final String createTicketsTable = "CREATE TABLE jregi_tickets" +
+				"(ticket_id INT AUTO_INCREMENT PRIMARY KEY, ticket_issuer VARCHAR(30), ticket_description VARCHAR(200))";
+		final String createUsersTable = "CREATE TABLE jregi_users" +
+				"(uid INT AUTO_INCREMENT PRIMARY KEY, uname VARCHAR(30), upass VARCHAR(30), admin int)";
 
 		try {
 
@@ -90,9 +91,8 @@ public class Dao {
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
 			for (List<String> rowData : array) {
-
-				sql = "insert into jpapa_users(uname,upass,admin) " + "values('" + rowData.get(0) + "'," + " '"
-						+ rowData.get(1) + "','" + rowData.get(2) + "');";
+				sql = "insert into jpapa_users(uname,upass,admin) " + "values('" + rowData.get(0) + "'," +
+						" '" + rowData.get(1) + "','" + rowData.get(2) + "');";
 				statement.executeUpdate(sql);
 			}
 			System.out.println("Inserts completed in the given database...");
@@ -109,8 +109,8 @@ public class Dao {
 		int id = 0;
 		try {
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert into jpapa_tickets" + "(ticket_issuer, ticket_description) values(" + " '"
-					+ ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+			statement.executeUpdate("Insert into jpapa_tickets" + "(ticket_issuer, ticket_description) values(" +
+					" '" + ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
 
 			// retrieve ticket id number newly auto generated upon record insertion
 			ResultSet resultSet = null;
@@ -121,11 +121,9 @@ public class Dao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return id;
-
 	}
 
 	public ResultSet readRecords() {
@@ -140,7 +138,12 @@ public class Dao {
 		}
 		return results;
 	}
-	// continue coding for updateRecords implementation
 
-	// continue coding for deleteRecords implementation
+	public void updateRecords() {
+
+	}
+
+	public void deleteRecords() {
+
+	}
 }
