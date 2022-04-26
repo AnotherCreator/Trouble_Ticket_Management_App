@@ -86,8 +86,6 @@ public class Tickets extends JFrame implements ActionListener {
 		  * for update and delete sub menus for example) with similar 
 		  * syntax & logic as shown above
 		 */
-
-
 	}
 
 	private void prepareGUI(boolean isAdmin) {
@@ -120,8 +118,8 @@ public class Tickets extends JFrame implements ActionListener {
 		// implement actions for sub menu items
 		if (e.getSource() == mnuItemExit) {
 			System.exit(0);
-		} else if (e.getSource() == mnuItemOpenTicket) {
 
+		} else if (e.getSource() == mnuItemOpenTicket) {
 			// get ticket information
 			String ticketName = JOptionPane.showInputDialog(null, "Enter your name");
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
@@ -135,13 +133,11 @@ public class Tickets extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
 			} else
 				System.out.println("Ticket cannot be created!!!");
-		}
 
-		else if (e.getSource() == mnuItemViewTicket) {
+		} else if (e.getSource() == mnuItemViewTicket) {
 
 			// retrieve all tickets details for viewing in JTable
 			try {
-
 				// Use JTable built in functionality to build a table model and
 				// display the table model off your result set!!!
 				JTable jt = new JTable(ticketsJTable.buildTableModel(dao.readRecords()));
@@ -153,12 +149,44 @@ public class Tickets extends JFrame implements ActionListener {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+
+		} else if (e.getSource() == mnuItemUpdate) {
+
+			// retrieve all tickets details for viewing in JTable
+			try {
+				// Use JTable built in functionality to build a table model and
+				// display the table model off your result set!!!
+				JTable jt = new JTable(ticketsJTable.buildTableModel(dao.readRecords()));
+				jt.setBounds(30, 40, 200, 400);
+				JScrollPane sp = new JScrollPane(jt);
+				add(sp);
+				setVisible(true); // refreshes or repaints frame on screen
+
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+			// get ticket information
+			String ticketID = JOptionPane.showInputDialog(null, "Enter the ticket ID to update");
+
+
+		} else if (e.getSource() == mnuItemDelete) {
+			// retrieve all tickets details for viewing in JTable
+			try {
+				// Use JTable built in functionality to build a table model and
+				// display the table model off your result set!!!
+				JTable jt = new JTable(ticketsJTable.buildTableModel(dao.readRecords()));
+				jt.setBounds(30, 40, 200, 400);
+				JScrollPane sp = new JScrollPane(jt);
+				add(sp);
+				setVisible(true); // refreshes or repaints frame on screen
+
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+			// get ticket information
+			String ticketID = JOptionPane.showInputDialog(null, "Enter the ticket ID to delete");
 		}
-		/*
-		 * continue implementing any other desired sub menu items (like for update and
-		 * delete sub menus for example) with similar syntax & logic as shown above
-		 */
-
 	}
-
 }
