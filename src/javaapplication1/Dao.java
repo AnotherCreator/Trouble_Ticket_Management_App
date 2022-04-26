@@ -34,11 +34,12 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
-		final String createTicketsTable = "CREATE TABLE jregi_tickets1" +
+		final String createTicketsTable = "CREATE TABLE jregi_tickets2" +
 				"(ticket_id INT AUTO_INCREMENT PRIMARY KEY," +
 				"ticket_issuer VARCHAR(30)," +
 				"ticket_description VARCHAR(200)," +
 				"ticket_start_date DATETIME," +
+				"ticket_status VARCHAR(5)," +
 				"ticket_end_date DATETIME)";
 
 		final String createUsersTable = "CREATE TABLE jregi_users" +
@@ -116,9 +117,15 @@ public class Dao {
 	public int insertRecords(String ticketName, String ticketDesc) {
 		int id = 0;
 		try {
+			java.util.Date dt = new java.util.Date();
+			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String currentTime = sdf.format(dt);
+
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert into jregi_tickets" + "(ticket_issuer, ticket_description) values(" +
-					" '" + ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+			statement.executeUpdate("Insert into jregi_tickets2" +
+					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) values(" +
+					"'"+ticketName+"', " + "'"+ ticketDesc +"', '"+currentTime+"', '"+"Open"+"')",
+					Statement.RETURN_GENERATED_KEYS);
 
 			// retrieve ticket id number newly auto generated upon record insertion
 			ResultSet resultSet = null;
@@ -139,7 +146,7 @@ public class Dao {
 		ResultSet results = null;
 		try {
 			statement = connect.createStatement();
-			results = statement.executeQuery("SELECT * FROM jregi_tickets");
+			results = statement.executeQuery("SELECT * FROM jregi_tickets2");
 			//connect.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -147,11 +154,21 @@ public class Dao {
 		return results;
 	}
 
-	public void updateRecords() {
+	public void updateRecords() { // Update records by ticket_id
+		try {
+			statement = connect.createStatement();
 
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 
-	public void deleteRecords() {
+	public void deleteRecords() { // Delete record(s) by ticket_id
+		try {
+			statement = connect.createStatement();
 
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
