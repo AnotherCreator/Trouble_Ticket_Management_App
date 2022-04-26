@@ -169,7 +169,7 @@ public class Tickets extends JFrame implements ActionListener {
 			// get ticket information
 			String ticketID = JOptionPane.showInputDialog(null, "Enter the ticket ID to update");
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter new description");
-			String ticketStatus = JOptionPane.showInputDialog(null, "Close ticket? (1 = YES / 2 = NO)");
+			String ticketStatus = JOptionPane.showInputDialog(null, "Close ticket? (1 = NO / 2 = YES)");
 			dao.updateRecords(Integer.valueOf(ticketID), ticketDesc, ticketStatus);
 
 		} else if (e.getSource() == mnuItemDelete) {

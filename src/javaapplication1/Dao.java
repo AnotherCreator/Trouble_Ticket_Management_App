@@ -162,11 +162,11 @@ public class Dao {
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String currentTime = sdf.format(dt);
 
-			statement = connect.createStatement();
 			PreparedStatement update = getConnection().prepareStatement(
 					"UPDATE jregi_tickets3 SET ticket_description = ?, " +
 							"ticket_modified_date = ?, " +
-							"ticket_status = ? " +
+							"ticket_status = ?, " +
+							"ticket_end_date = ?" +
 							"WHERE ticket_id = ?",
 					Statement.RETURN_GENERATED_KEYS);
 
@@ -175,9 +175,10 @@ public class Dao {
 			if (Objects.equals(ticketStatus, "1") || Objects.equals(ticketStatus, null)) {
 				update.setString(3, "Open");
 			} else {
-				update.setString(3, "Closed");
+				update.setString(3, "Close");
+				update.setString(4, currentTime);
 			}
-			update.setInt(4, ticketID);
+			update.setInt(5, ticketID);
 			update.executeUpdate();
 
 		} catch (SQLException e1) {
