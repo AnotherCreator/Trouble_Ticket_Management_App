@@ -28,14 +28,18 @@ public class Tickets extends JFrame implements ActionListener {
 	JMenuItem mnuItemViewTicket;
 
 	public Tickets(Boolean isAdmin) {
-
-		chkIfAdmin = isAdmin;
-		createMenu();
-		prepareGUI();
+		// Admin view
+		if (chkIfAdmin = isAdmin) {
+			createMenu(true);
+			prepareGUI(true);
+		} else { // Non-Admin view
+			createMenu(false);
+			prepareGUI(false);
+		}
 
 	}
 
-	private void createMenu() {
+	private void createMenu(boolean isAdmin) {
 
 		/* Initialize sub menu items **************************************/
 
@@ -44,15 +48,17 @@ public class Tickets extends JFrame implements ActionListener {
 		// add to File main menu item
 		mnuFile.add(mnuItemExit);
 
-		// initialize first sub menu items for Admin main menu
-		mnuItemUpdate = new JMenuItem("Update Ticket");
-		// add to Admin main menu item
-		mnuAdmin.add(mnuItemUpdate);
+		if (isAdmin) {
+			// initialize first sub menu items for Admin main menu
+			mnuItemUpdate = new JMenuItem("Update Ticket");
+			// add to Admin main menu item
+			mnuAdmin.add(mnuItemUpdate);
 
-		// initialize second sub menu items for Admin main menu
-		mnuItemDelete = new JMenuItem("Delete Ticket");
-		// add to Admin main menu item
-		mnuAdmin.add(mnuItemDelete);
+			// initialize second sub menu items for Admin main menu
+			mnuItemDelete = new JMenuItem("Delete Ticket");
+			// add to Admin main menu item
+			mnuAdmin.add(mnuItemDelete);
+		}
 
 		// initialize first sub menu item for Tickets main menu
 		mnuItemOpenTicket = new JMenuItem("Open Ticket");
@@ -68,8 +74,10 @@ public class Tickets extends JFrame implements ActionListener {
 
 		/* Add action listeners for each desired menu item *************/
 		mnuItemExit.addActionListener(this);
-		mnuItemUpdate.addActionListener(this);
-		mnuItemDelete.addActionListener(this);
+		if (isAdmin) {
+			mnuItemUpdate.addActionListener(this);
+			mnuItemDelete.addActionListener(this);
+		}
 		mnuItemOpenTicket.addActionListener(this);
 		mnuItemViewTicket.addActionListener(this);
 
@@ -82,12 +90,14 @@ public class Tickets extends JFrame implements ActionListener {
 
 	}
 
-	private void prepareGUI() {
+	private void prepareGUI(boolean isAdmin) {
 
 		// create JMenu bar
 		JMenuBar bar = new JMenuBar();
 		bar.add(mnuFile); // add main menu items in order, to JMenuBar
-		bar.add(mnuAdmin);
+		if (isAdmin) {
+			bar.add(mnuAdmin);
+		}
 		bar.add(mnuTickets);
 		// add menu bar components to frame
 		setJMenuBar(bar);
@@ -117,7 +127,6 @@ public class Tickets extends JFrame implements ActionListener {
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
 
 			// insert ticket information to database
-
 			int id = dao.insertRecords(ticketName, ticketDesc);
 
 			// display results if successful or not to console / dialog box
