@@ -34,11 +34,12 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
-		final String createTicketsTable = "CREATE TABLE jregi_tickets2" +
+		final String createTicketsTable = "CREATE TABLE jregi_tickets3" +
 				"(ticket_id INT AUTO_INCREMENT PRIMARY KEY," +
 				"ticket_issuer VARCHAR(30)," +
 				"ticket_description VARCHAR(200)," +
 				"ticket_start_date DATETIME," +
+				"ticket_modified_date DATETIME," +
 				"ticket_status VARCHAR(5)," +
 				"ticket_end_date DATETIME)";
 
@@ -122,7 +123,7 @@ public class Dao {
 			String currentTime = sdf.format(dt);
 
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert into jregi_tickets2" +
+			statement.executeUpdate("Insert into jregi_tickets3" +
 					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) values(" +
 					"'"+ticketName+"', " + "'"+ ticketDesc +"', '"+currentTime+"', '"+"Open"+"')",
 					Statement.RETURN_GENERATED_KEYS);
@@ -146,7 +147,7 @@ public class Dao {
 		ResultSet results = null;
 		try {
 			statement = connect.createStatement();
-			results = statement.executeQuery("SELECT * FROM jregi_tickets2");
+			results = statement.executeQuery("SELECT * FROM jregi_tickets3");
 			//connect.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -154,9 +155,11 @@ public class Dao {
 		return results;
 	}
 
-	public void updateRecords() { // Update records by ticket_id
+	public void updateRecords(String ticket_id) { // Update records by ticket_id
 		try {
 			statement = connect.createStatement();
+
+//			String newDesc =
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();
