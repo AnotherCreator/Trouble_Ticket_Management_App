@@ -29,7 +29,6 @@ public class Login extends JFrame {
 		// JLabel lblSpacer = new JLabel(" ", JLabel.CENTER);
 
 		JTextField txtUname = new JTextField(10);
-
 		JPasswordField txtPassword = new JPasswordField();
 		JButton btn = new JButton("Submit");
 		JButton btnExit = new JButton("Exit");
@@ -58,7 +57,7 @@ public class Login extends JFrame {
 				count = count + 1;
 				// verify credentials of user (MAKE SURE TO CHANGE TO YOUR TABLE NAME BELOW)
 
-				String query = "SELECT * FROM jregi_users WHERE uname = ? and upass = ?;";
+				String query = "SELECT * FROM jregi_users1 WHERE uname = ? and upass = ?;";
 				try (PreparedStatement stmt = conn.getConnection().prepareStatement(query)) {
 					stmt.setString(1, txtUname.getText());
 					stmt.setString(2, txtPassword.getText());
