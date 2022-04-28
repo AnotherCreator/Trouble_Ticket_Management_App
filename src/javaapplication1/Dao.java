@@ -80,7 +80,6 @@ public class Dao {
 		// read data from file
 		try {
 			br = new BufferedReader(new FileReader(new File("./userlist.csv")));
-
 			String line;
 			while ((line = br.readLine()) != null) {
 				array.add(Arrays.asList(line.split(",")));
