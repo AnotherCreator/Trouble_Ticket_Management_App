@@ -69,8 +69,6 @@ public class Tickets extends JFrame implements ActionListener {
 		// add to Ticket Main menu item
 		mnuTickets.add(mnuItemViewTicket);
 
-		// initialize any more desired sub menu items below
-
 		/* Add action listeners for each desired menu item *************/
 		mnuItemExit.addActionListener(this);
 		if (isAdmin) {
@@ -79,12 +77,6 @@ public class Tickets extends JFrame implements ActionListener {
 		}
 		mnuItemOpenTicket.addActionListener(this);
 		mnuItemViewTicket.addActionListener(this);
-
-		 /*
-		  * continue implementing any other desired sub menu items (like 
-		  * for update and delete sub menus for example) with similar 
-		  * syntax & logic as shown above
-		 */
 	}
 
 	private void prepareGUI(boolean isAdmin) {
