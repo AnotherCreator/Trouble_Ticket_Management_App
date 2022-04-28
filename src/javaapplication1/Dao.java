@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Dao {
 	// instance fields
@@ -35,16 +32,16 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
-		final String createTicketsTable = "CREATE TABLE jregi_tickets3" +
+		final String createTicketsTable = "CREATE TABLE jregi_tickets4" +
 				"(ticket_id INT AUTO_INCREMENT PRIMARY KEY," +
 				"ticket_issuer VARCHAR(30)," +
 				"ticket_description VARCHAR(200)," +
 				"ticket_start_date DATETIME," +
 				"ticket_modified_date DATETIME," +
-				"ticket_status VARCHAR(5)," +
+				"ticket_status VARCHAR(6)," +
 				"ticket_end_date DATETIME)";
 
-		final String createUsersTable = "CREATE TABLE jregi_users" +
+		final String createUsersTable = "CREATE TABLE jregi_users1" +
 				"(uid INT AUTO_INCREMENT PRIMARY KEY, uname VARCHAR(30), upass VARCHAR(30), admin int)";
 
 		try {
@@ -77,6 +74,8 @@ public class Dao {
 		Statement statement;
 		BufferedReader br;
 		List<List<String>> array = new ArrayList<>(); // list to hold (rows & cols)
+		HashMap<Integer, String> userList = new HashMap<>(); // Hashmap for local userlist.csv
+		HashMap<Integer, String> ExistingUserList = new HashMap<>(); // Hashmap for existing database users
 
 		// read data from file
 		try {
@@ -90,29 +89,72 @@ public class Dao {
 			System.out.println("There was a problem loading the file");
 		}
 
+		// Query userlist.csv to check if new users have been added
+		int i = 0;
+		for (List<String> rowData : array) {
+			if (!userList.containsValue(rowData.get(0))) { // If user does not exist, add to hashmap
+				userList.put(i, rowData.get(0));
+			}
+			i++;
+		}
+
+		// Query database to create a hashmap of existing users
+		try {
+			PreparedStatement checkUsers = getConnection().prepareStatement(
+					"SELECT uname FROM jregi_users",
+					Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = checkUsers.executeQuery();
+
+			int j = 0;
+			while (rs.next()) {
+				if (!ExistingUserList.containsValue(rs.getString(1))) { // If user does not exist, add to hashmap
+					ExistingUserList.put(j, rs.getString(1));
+					j++;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Insert users into database
 		try {
 			statement = getConnection().createStatement();
 
+//			PreparedStatement checkUsers = getConnection().prepareStatement(
+//					"SELECT uname FROM jregi_users",
+//					Statement.RETURN_GENERATED_KEYS);
+//			ResultSet rs = checkUsers.executeQuery();
+
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
-			for (List<String> rowData : array) {
-				// Check if user exists in the table
-				if (statement.execute("SELECT * FROM jregi_users WHERE uname = '"+rowData.get(0)+"'")) {
-					continue;
-				} else {
-					// Add new user(s) to table
-					sql = "insert into jregi_users(uname,upass,admin) " + "values('" + rowData.get(0) + "'," +
-							" '" + rowData.get(1) + "','" + rowData.get(2) + "');";
-					statement.executeUpdate(sql);
-				}
-			}
-			System.out.println("Inserts completed in the given database...");
+
+//			for (List<String> rowData : array) {
+//				if (Objects.equals(rs.getString(1), rowData.get(0))) {
+//					System.out.printf("\n%s == %s", rs.getString(1), rowData.get(0));
+//				} else {
+//					System.out.printf("\n%s != %s", rs.getString(1), rowData.get(0));
+//				}
+//			}
+//				} else {
+//					// Add new user(s) to table
+//					PreparedStatement addUser = getConnection().prepareStatement(
+//							"INSERT INTO jregi_users1" +
+//									"(uname, upass, admin) " +
+//									"VALUES(?, ?, ?)",
+//							Statement.RETURN_GENERATED_KEYS);
+//
+//					addUser.setString(1, rowData.get(0));
+//					addUser.setString(2, rowData.get(1));
+//					addUser.setInt(3, Integer.parseInt(rowData.get(2)));
+//					addUser.executeUpdate();
+//				}
+//			}
+			System.out.println("\nInserts completed in the given database...");
 
 			// close statement object
 			statement.close();
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -126,7 +168,7 @@ public class Dao {
 			// New tickets will always have a default "Open" status and current local time
 			// Ticket issuer and desc will always be inputted by the user
 			statement = getConnection().createStatement();
-			statement.executeUpdate("Insert INTO jregi_tickets3" +
+			statement.executeUpdate("Insert INTO jregi_tickets4" +
 					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) VALUES(" +
 					"'"+ticketName+"', '"+ticketDesc+"', '"+currentTime+"', '"+"Open"+"')",
 					Statement.RETURN_GENERATED_KEYS);
@@ -145,11 +187,10 @@ public class Dao {
 	}
 
 	public ResultSet readRecords() {
-
 		ResultSet results = null;
 		try {
 			statement = connect.createStatement();
-			results = statement.executeQuery("SELECT * FROM jregi_tickets3");
+			results = statement.executeQuery("SELECT * FROM jregi_tickets4");
 //			connect.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -164,7 +205,7 @@ public class Dao {
 			String currentTime = sdf.format(dt);
 
 			PreparedStatement update = getConnection().prepareStatement(
-					"UPDATE jregi_tickets3 SET ticket_description = ?," +
+					"UPDATE jregi_tickets4 SET ticket_description = ?," +
 							"ticket_modified_date = ?, " +
 							"ticket_status = ?, " +
 							"ticket_end_date = ?" +
@@ -191,7 +232,7 @@ public class Dao {
 	public int deleteRecords(Integer ticketID) { // Delete record(s) by ticket_id
 		try {
 			PreparedStatement delete = getConnection().prepareStatement(
-					"DELETE FROM jregi_tickets3 WHERE ticket_id = ?",
+					"DELETE FROM jregi_tickets4 WHERE ticket_id = ?",
 			Statement.RETURN_GENERATED_KEYS);
 
 			delete.setInt(1, ticketID);
