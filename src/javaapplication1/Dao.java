@@ -123,6 +123,8 @@ public class Dao {
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String currentTime = sdf.format(dt);
 
+			// New tickets will always have a default "Open" status and current local time
+			// Ticket issuer and desc will always be inputted by the user
 			statement = getConnection().createStatement();
 			statement.executeUpdate("Insert INTO jregi_tickets3" +
 					"(ticket_issuer, ticket_description, ticket_start_date, ticket_status) VALUES(" +
@@ -136,7 +138,6 @@ public class Dao {
 				// retrieve first field in table
 				id = resultSet.getInt(1);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -149,21 +150,21 @@ public class Dao {
 		try {
 			statement = connect.createStatement();
 			results = statement.executeQuery("SELECT * FROM jregi_tickets3");
-			//connect.close();
+//			connect.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return results;
 	}
 
-	public void updateRecords(Integer ticketID, String ticketDesc, String ticketStatus) { // Update records by ticket_id
+	public int updateRecords(Integer ticketID, String ticketDesc, String ticketStatus) { // Update records by ticket_id
 		try {
 			java.util.Date dt = new java.util.Date();
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String currentTime = sdf.format(dt);
 
 			PreparedStatement update = getConnection().prepareStatement(
-					"UPDATE jregi_tickets3 SET ticket_description = ?, " +
+					"UPDATE jregi_tickets3 SET ticket_description = ?," +
 							"ticket_modified_date = ?, " +
 							"ticket_status = ?, " +
 							"ticket_end_date = ?" +
@@ -184,14 +185,21 @@ public class Dao {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		return ticketID;
 	}
 
-	public void deleteRecords() { // Delete record(s) by ticket_id
+	public int deleteRecords(Integer ticketID) { // Delete record(s) by ticket_id
 		try {
-			statement = connect.createStatement();
+			PreparedStatement delete = getConnection().prepareStatement(
+					"DELETE FROM jregi_tickets3 WHERE ticket_id = ?",
+			Statement.RETURN_GENERATED_KEYS);
+
+			delete.setInt(1, ticketID);
+			delete.executeUpdate();
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		return ticketID;
 	}
 }

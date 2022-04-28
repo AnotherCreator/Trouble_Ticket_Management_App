@@ -73,7 +73,6 @@ public class Login extends JFrame {
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
- 			 
 			}
 		});
 		btnExit.addActionListener(e -> System.exit(0));

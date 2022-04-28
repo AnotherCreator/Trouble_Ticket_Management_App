@@ -36,7 +36,6 @@ public class Tickets extends JFrame implements ActionListener {
 			createMenu(false);
 			prepareGUI(false);
 		}
-
 	}
 
 	private void createMenu(boolean isAdmin) {
@@ -170,7 +169,14 @@ public class Tickets extends JFrame implements ActionListener {
 			String ticketID = JOptionPane.showInputDialog(null, "Enter the ticket ID to update");
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter new description");
 			String ticketStatus = JOptionPane.showInputDialog(null, "Close ticket? (1 = NO / 2 = YES)");
-			dao.updateRecords(Integer.valueOf(ticketID), ticketDesc, ticketStatus);
+			int id = dao.updateRecords(Integer.valueOf(ticketID), ticketDesc, ticketStatus);
+
+			// display results if successful or not to console / dialog box
+			if (id != 0) {
+				System.out.println("Ticket ID : " + id + " updated successfully!!!");
+				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
+			} else
+				System.out.println("Ticket cannot be updated!!!");
 
 		} else if (e.getSource() == mnuItemDelete) {
 			// retrieve all tickets details for viewing in JTable
@@ -189,6 +195,14 @@ public class Tickets extends JFrame implements ActionListener {
 
 			// get ticket information
 			String ticketID = JOptionPane.showInputDialog(null, "Enter the ticket ID to delete");
+			int id = dao.deleteRecords(Integer.valueOf(ticketID));
+
+			// display results if successful or not to console / dialog box
+			if (id != 0) {
+				System.out.println("Ticket ID : " + id + " deleted successfully!!!");
+				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " deleted");
+			} else
+				System.out.println("Ticket cannot be deleted!!!");
 		}
 	}
 }
