@@ -132,6 +132,7 @@ public class Dao {
 		}
 	}
 
+	// TODO:	- Add a default value for 'ticket_issuer' as the user currently logged in
 	public int insertRecords(String ticketName, String ticketDesc) {
 		int id = 0;
 		try {
@@ -172,6 +173,8 @@ public class Dao {
 		return results;
 	}
 
+	// TODO:	- Allow the user to select which category they want to update
+	// 			- Non-Admin: Allow updating of only tickets created by the user
 	public int updateRecords(Integer ticketID, String ticketDesc, String ticketStatus) { // Update records by ticket_id
 		try {
 			java.util.Date dt = new java.util.Date();
