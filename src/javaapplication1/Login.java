@@ -55,7 +55,7 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				boolean admin = false;
 				count = count + 1;
-				// verify credentials of user (MAKE SURE TO CHANGE TO YOUR TABLE NAME BELOW)
+				// verify credentials of user
 
 				String query = "SELECT * FROM jregi_users1 WHERE uname = ? and upass = ?;";
 				try (PreparedStatement stmt = conn.getConnection().prepareStatement(query)) {
