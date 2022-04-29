@@ -165,7 +165,7 @@ public class Tickets extends JFrame implements ActionListener {
 			// display results if successful or not to console / dialog box
 			if (id != 0) {
 				System.out.println("Ticket ID : " + id + " updated successfully!!!");
-				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
+				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " updated");
 			} else {
 				System.out.println("Ticket cannot be updated!!!");
 			}
