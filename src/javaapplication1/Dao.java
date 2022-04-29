@@ -74,7 +74,6 @@ public class Dao {
 		Statement statement;
 		BufferedReader br;
 		List<List<String>> array = new ArrayList<>(); // list to hold (rows & cols)
-		HashMap<Integer, String> userList = new HashMap<>(); // Hashmap for local userlist.csv
 		HashMap<Integer, String> ExistingUserList = new HashMap<>(); // Hashmap for existing database users
 
 		// read data from file
@@ -86,15 +85,6 @@ public class Dao {
 			}
 		} catch (Exception e) {
 			System.out.println("There was a problem loading the file");
-		}
-
-		// Query userlist.csv to check if new users have been added
-		int i = 0;
-		for (List<String> rowData : array) {
-			if (!userList.containsValue(rowData.get(0))) { // If user does not exist, add to hashmap
-				userList.put(i, rowData.get(0));
-			}
-			i++;
 		}
 
 		// Query database to create a hashmap of existing users
@@ -119,7 +109,6 @@ public class Dao {
 		try {
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
-
 			for (List<String> rowData : array) {
 				// Add user to database if they dont exist inside hashmap
 				if (!(ExistingUserList.containsValue(rowData.get(0)))) {
