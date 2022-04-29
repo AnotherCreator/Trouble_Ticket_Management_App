@@ -201,6 +201,7 @@ public class Dao {
 			update.setString(2, currentTime);
 			if (Objects.equals(ticketStatus, "1") || Objects.equals(ticketStatus, null)) {
 				update.setString(3, "Open");
+				update.setString(4, currentTime);
 			} else {
 				update.setString(3, "Close");
 				update.setString(4, currentTime);
