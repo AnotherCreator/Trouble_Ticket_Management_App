@@ -122,11 +122,11 @@ public class Tickets extends JFrame implements ActionListener {
 			if (id != 0) {
 				System.out.println("Ticket ID : " + id + " created successfully!!!");
 				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
-			} else
+			} else {
 				System.out.println("Ticket cannot be created!!!");
+			}
 
 		} else if (e.getSource() == mnuItemViewTicket) {
-
 			// retrieve all tickets details for viewing in JTable
 			try {
 				// Use JTable built in functionality to build a table model and
@@ -142,7 +142,6 @@ public class Tickets extends JFrame implements ActionListener {
 			}
 
 		} else if (e.getSource() == mnuItemUpdate) {
-
 			// retrieve all tickets details for viewing in JTable
 			try {
 				// Use JTable built in functionality to build a table model and
@@ -167,8 +166,9 @@ public class Tickets extends JFrame implements ActionListener {
 			if (id != 0) {
 				System.out.println("Ticket ID : " + id + " updated successfully!!!");
 				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
-			} else
+			} else {
 				System.out.println("Ticket cannot be updated!!!");
+			}
 
 		} else if (e.getSource() == mnuItemDelete) {
 			// retrieve all tickets details for viewing in JTable
@@ -193,8 +193,9 @@ public class Tickets extends JFrame implements ActionListener {
 			if (id != 0) {
 				System.out.println("Ticket ID : " + id + " deleted successfully!!!");
 				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " deleted");
-			} else
+			} else {
 				System.out.println("Ticket cannot be deleted!!!");
+			}
 		}
 	}
 }
