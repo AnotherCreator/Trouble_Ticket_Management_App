@@ -189,26 +189,36 @@ public class Dao {
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String currentTime = sdf.format(dt);
 
-			PreparedStatement update = getConnection().prepareStatement(
-					"UPDATE jregi_tickets4 SET ticket_description = ?," +
-							"ticket_modified_date = ?, " +
-							"ticket_status = ?, " +
-							"ticket_end_date = ?" +
-							"WHERE ticket_id = ?",
-					Statement.RETURN_GENERATED_KEYS);
-
-			update.setString(1, ticketDesc);
-			update.setString(2, currentTime);
+			// Open Ticket
 			if (Objects.equals(ticketStatus, "1") || Objects.equals(ticketStatus, null)) {
-				update.setString(3, "Open");
-				update.setString(2, currentTime);
-			} else {
-				update.setString(3, "Close");
-				update.setString(4, currentTime);
-			}
-			update.setInt(5, ticketID);
-			update.executeUpdate();
+				PreparedStatement updateOpen = getConnection().prepareStatement(
+						"UPDATE jregi_tickets4 SET ticket_description = ?," +
+								"ticket_modified_date = ?, " +
+								"ticket_status = ? " +
+								"WHERE ticket_id = ?",
+						Statement.RETURN_GENERATED_KEYS);
 
+				updateOpen.setString(1, ticketDesc);
+				updateOpen.setString(2, currentTime);
+				updateOpen.setString(3, "Open");
+				updateOpen.setInt(4, ticketID);
+				updateOpen.executeUpdate();
+			// Close ticket
+			} else {
+				PreparedStatement updateClose = getConnection().prepareStatement(
+						"UPDATE jregi_tickets4 SET ticket_description = ?," +
+								"ticket_modified_date = ?, " +
+								"ticket_status = ?, " +
+								"ticket_end_date = ?" +
+								"WHERE ticket_id = ?",
+						Statement.RETURN_GENERATED_KEYS);
+				updateClose.setString(1, ticketDesc);
+				updateClose.setString(2, currentTime);
+				updateClose.setString(3, "Closed");
+				updateClose.setString(4, currentTime);
+				updateClose.setInt(5, ticketID);
+				updateClose.executeUpdate();
+			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
