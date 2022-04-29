@@ -100,7 +100,7 @@ public class Dao {
 		// Query database to create a hashmap of existing users
 		try {
 			PreparedStatement checkUsers = getConnection().prepareStatement(
-					"SELECT uname FROM jregi_users",
+					"SELECT uname FROM jregi_users1",
 					Statement.RETURN_GENERATED_KEYS);
 			ResultSet rs = checkUsers.executeQuery();
 
@@ -117,41 +117,27 @@ public class Dao {
 
 		// Insert users into database
 		try {
-			statement = getConnection().createStatement();
-
-//			PreparedStatement checkUsers = getConnection().prepareStatement(
-//					"SELECT uname FROM jregi_users",
-//					Statement.RETURN_GENERATED_KEYS);
-//			ResultSet rs = checkUsers.executeQuery();
-
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
 
-//			for (List<String> rowData : array) {
-//				if (Objects.equals(rs.getString(1), rowData.get(0))) {
-//					System.out.printf("\n%s == %s", rs.getString(1), rowData.get(0));
-//				} else {
-//					System.out.printf("\n%s != %s", rs.getString(1), rowData.get(0));
-//				}
-//			}
-//				} else {
-//					// Add new user(s) to table
-//					PreparedStatement addUser = getConnection().prepareStatement(
-//							"INSERT INTO jregi_users1" +
-//									"(uname, upass, admin) " +
-//									"VALUES(?, ?, ?)",
-//							Statement.RETURN_GENERATED_KEYS);
-//
-//					addUser.setString(1, rowData.get(0));
-//					addUser.setString(2, rowData.get(1));
-//					addUser.setInt(3, Integer.parseInt(rowData.get(2)));
-//					addUser.executeUpdate();
-//				}
-//			}
-			System.out.println("\nInserts completed in the given database...");
+			for (List<String> rowData : array) {
+				// Add user to database if they dont exist inside hashmap
+				if (!(ExistingUserList.containsValue(rowData.get(0)))) {
+					System.out.println("New user found, adding to database. . .");
 
-			// close statement object
-			statement.close();
+					PreparedStatement addUser = getConnection().prepareStatement(
+							"INSERT INTO jregi_users1" +
+									"(uname, upass, admin) " +
+									"VALUES(?, ?, ?)",
+							Statement.RETURN_GENERATED_KEYS);
+
+					addUser.setString(1, rowData.get(0));
+					addUser.setString(2, rowData.get(1));
+					addUser.setInt(3, Integer.parseInt(rowData.get(2)));
+					addUser.executeUpdate();
+				}
+			}
+			System.out.println("\nInserts completed in the given database...");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
